@@ -1,0 +1,30 @@
+# Ansible
+*.retry
+.vault_pass
+.vault_password
+vault_password_file
+
+# Secrets
+*.pem
+*.key
+*.crt
+id_rsa*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Vagrant
+.vagrant/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
