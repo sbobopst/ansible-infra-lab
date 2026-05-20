@@ -1,0 +1,12 @@
+---
+# Virtual host name
+nginx_vhost_name: "lab"
+
+# Web root directory
+nginx_web_root: "/var/www/lab"
+
+# Server name (hostname or IP)
+nginx_server_name: "{{ ansible_hostname }}"
+
+# Port to listen on
+nginx_port: 80
