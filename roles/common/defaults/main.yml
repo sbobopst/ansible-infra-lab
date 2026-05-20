@@ -1,0 +1,14 @@
+---
+# Base packages installed on every host
+common_packages:
+  - curl
+  - vim
+  - git
+  - htop
+  - unzip
+  - wget
+  - net-tools
+  - python3-pip
+
+# Dedicated user for Ansible operations
+ansible_deploy_user: ansible
