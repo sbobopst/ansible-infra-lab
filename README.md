@@ -77,7 +77,7 @@ monitor01   | SUCCESS => { "ping": "pong" }
 
 | Role | Description | Status |
 |------|-------------|--------|
-| common | Base system configuration, updates, timezone | 🔜 |
+| common | Base system configuration, updates, timezone | [✅ Done](docs/roles/common.md) |
 | webserver | nginx installation and virtual host configuration | 🔜 |
 | database | PostgreSQL setup, users and databases | 🔜 |
 | hardening | SSH hardening, UFW firewall, fail2ban | 🔜 |
