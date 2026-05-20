@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ansible_hostname }} — Ansible Lab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 48px 56px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+        }
+        .badge {
+            display: inline-block;
+            background: #00c853;
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 32px;
+        }
+        .info {
+            background: #111;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+            font-size: 13px;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #666; }
+        .info-value { color: #00c853; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="badge">● online</div>
+        <h1>{{ ansible_hostname }}</h1>
+        <p class="subtitle">Ansible Infrastructure Lab</p>
+        <div class="info">
+            <div class="info-row">
+                <span class="info-label">IP Address</span>
+                <span class="info-value">{{ ansible_default_ipv4.address }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">OS</span>
+                <span class="info-value">{{ ansible_distribution }} {{ ansible_distribution_version }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Web Server</span>
+                <span class="info-value">nginx</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Provisioned by</span>
+                <span class="info-value">Ansible</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
