@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: sbobopst
+  description: System hardening — SSH, UFW, fail2ban, sysctl, automatic updates
+  license: MIT
+  min_ansible_version: "2.20"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy

@@ -1,0 +1,5 @@
+---
+# Extra ports to open on dbservers
+# PostgreSQL accessible only from internal network
+hardening_allowed_ports:
+  - { port: "5432", proto: "tcp" }

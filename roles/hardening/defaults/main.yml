@@ -1,0 +1,44 @@
+---
+# ============================================================
+# SSH
+# ============================================================
+hardening_ssh_port: 22
+hardening_ssh_permit_root_login: "no"
+hardening_ssh_password_authentication: "no"
+hardening_ssh_max_auth_tries: 3
+hardening_ssh_login_grace_time: 30
+hardening_ssh_allow_agent_forwarding: "no"
+hardening_ssh_x11_forwarding: "no"
+
+# ============================================================
+# UFW — extra ports to allow (beyond SSH)
+# Override per group in group_vars
+# ============================================================
+hardening_allowed_ports: []
+# Example:
+# hardening_allowed_ports:
+#   - { port: "80", proto: "tcp" }
+#   - { port: "443", proto: "tcp" }
+
+# ============================================================
+# FAIL2BAN
+# ============================================================
+hardening_fail2ban_bantime: "1h"
+hardening_fail2ban_findtime: "10m"
+hardening_fail2ban_maxretry: 5
+
+# ============================================================
+# SYSCTL — network hardening
+# ============================================================
+hardening_sysctl_settings:
+  # Disable IP forwarding
+  - { key: "net.ipv4.ip_forward", value: "0" }
+  # Disable ICMP redirects
+  - { key: "net.ipv4.conf.all.accept_redirects", value: "0" }
+  - { key: "net.ipv4.conf.default.accept_redirects", value: "0" }
+  # Ignore ICMP broadcast requests
+  - { key: "net.ipv4.icmp_echo_ignore_broadcasts", value: "1" }
+  # Enable TCP SYN cookies (protection against SYN flood)
+  - { key: "net.ipv4.tcp_syncookies", value: "1" }
+  # Disable source routing
+  - { key: "net.ipv4.conf.all.accept_source_route", value: "0" }

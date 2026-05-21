@@ -1,0 +1,5 @@
+---
+# Extra ports to open on monitoring hosts
+hardening_allowed_ports:
+  - { port: "9090", proto: "tcp" }   # Prometheus
+  - { port: "9100", proto: "tcp" }   # Node Exporter

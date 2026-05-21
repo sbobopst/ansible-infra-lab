@@ -1,0 +1,5 @@
+---
+# Extra ports to open on webservers
+hardening_allowed_ports:
+  - { port: "80", proto: "tcp" }
+  - { port: "443", proto: "tcp" }

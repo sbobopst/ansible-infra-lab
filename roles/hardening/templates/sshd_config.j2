@@ -1,0 +1,31 @@
+# sshd_config — managed by Ansible
+# Do not edit manually
+
+# Network
+Port {{ hardening_ssh_port }}
+AddressFamily inet
+ListenAddress 0.0.0.0
+
+# Authentication
+PermitRootLogin {{ hardening_ssh_permit_root_login }}
+PasswordAuthentication {{ hardening_ssh_password_authentication }}
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+MaxAuthTries {{ hardening_ssh_max_auth_tries }}
+LoginGraceTime {{ hardening_ssh_login_grace_time }}
+
+# Security
+AllowAgentForwarding {{ hardening_ssh_allow_agent_forwarding }}
+X11Forwarding {{ hardening_ssh_x11_forwarding }}
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+UsePAM yes
+
+# Logging
+SyslogFacility AUTH
+LogLevel VERBOSE
+
+# Session
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server

@@ -1,0 +1,7 @@
+---
+- name: Apply hardening to all hosts
+  hosts: all
+  become: true
+  roles:
+    - common
+    - hardening
