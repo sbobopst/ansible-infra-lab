@@ -79,7 +79,7 @@ monitor01   | SUCCESS => { "ping": "pong" }
 |------|-------------|--------|
 | common | Base system configuration, updates, timezone | [✅ Done](docs/roles/common.md) |
 | webserver | nginx installation and virtual host configuration | [✅ Done](docs/roles/webserver.md) |
-| database | PostgreSQL setup, users and databases | 🔜 |
+| database | PostgreSQL setup, users and databases | [✅ Done](docs/roles/database.md) |
 | hardening | SSH hardening, UFW firewall, fail2ban | 🔜 |
 | monitoring | Prometheus + Node Exporter | 🔜 |
 | docker | Docker Engine installation and configuration | 🔜 |

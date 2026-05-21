@@ -1,0 +1,9 @@
+---
+- name: Configure database servers
+  hosts: dbservers
+  become: true
+  vars_files:
+    - ../vault/secrets.yml
+  roles:
+    - common
+    - database

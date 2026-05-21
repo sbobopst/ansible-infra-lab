@@ -1,0 +1,52 @@
+---
+- name: Install PostgreSQL and dependencies
+  ansible.builtin.apt:
+    name: "{{ postgresql_packages }}"
+    state: present
+    update_cache: true
+
+- name: Ensure PostgreSQL is enabled and started
+  ansible.builtin.service:
+    name: "postgresql"
+    state: started
+    enabled: true
+
+- name: Ensure PostgreSQL is listening on all interfaces
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf"
+    regexp: "^#?listen_addresses"
+    line: "listen_addresses = '{{ postgresql_listen_addresses }}'"
+    state: present
+  notify: Restart postgresql
+
+- name: Deploy pg_hba.conf
+  ansible.builtin.template:
+    src: pg_hba.conf.j2
+    dest: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: "0640"
+  notify: Restart postgresql
+
+- name: Create application database
+  community.postgresql.postgresql_db:
+    name: "{{ postgresql_db_name }}"
+    state: present
+  become_user: postgres
+
+- name: Create application database user
+  community.postgresql.postgresql_user:
+    name: "{{ postgresql_db_user }}"
+    password: "{{ postgresql_db_password }}"
+    state: present
+  become_user: postgres
+  no_log: true
+
+- name: Grant privileges to application user
+  community.postgresql.postgresql_privs:
+    database: "{{ postgresql_db_name }}"
+    roles: "{{ postgresql_db_user }}"
+    type: database
+    privs: ALL
+    state: present
+  become_user: postgres

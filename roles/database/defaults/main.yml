@@ -1,0 +1,19 @@
+---
+# PostgreSQL version
+postgresql_version: "14"
+
+# Packages to install
+postgresql_packages:
+  - postgresql
+  - postgresql-contrib
+  - python3-psycopg2
+
+# Network
+postgresql_listen_addresses: "localhost"
+
+# Database
+postgresql_db_name: "labdb"
+
+# User — password comes from vault/secrets.yml
+postgresql_db_user: "labuser"
+postgresql_db_password: "{{ vault_postgresql_db_password }}"
