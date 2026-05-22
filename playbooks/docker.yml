@@ -1,0 +1,7 @@
+---
+- name: Install Docker Engine on all hosts
+  hosts: all
+  become: true
+  roles:
+    - common
+    - docker

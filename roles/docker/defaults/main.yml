@@ -1,0 +1,25 @@
+---
+# Dependencies required before installing Docker
+docker_dependencies:
+  - ca-certificates
+  - curl
+  - gnupg
+  - apt-transport-https
+
+# Docker packages to install
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+# Users to add to the docker group
+# Override in group_vars or host_vars as needed
+docker_users:
+  - vagrant
+
+# Docker daemon settings
+docker_log_driver: "json-file"
+docker_log_max_size: "10m"
+docker_log_max_file: "3"

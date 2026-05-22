@@ -82,7 +82,7 @@ monitor01   | SUCCESS => { "ping": "pong" }
 | database | PostgreSQL setup, users and databases | [✅ Done](docs/roles/database.md) |
 | hardening | SSH hardening, UFW firewall, fail2ban | [✅ Done](docs/roles/hardening.md) |
 | monitoring | Prometheus + Node Exporter | [✅ Done](docs/roles/monitoring.md) |
-| docker | Docker Engine installation and configuration | 🔜 |
+| docker | Docker Engine installation and configuration | [✅ Done](docs/roles/docker.md) |
 
 ---
 
