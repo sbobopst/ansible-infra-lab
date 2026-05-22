@@ -1,0 +1,182 @@
+---
+# ============================================================
+# NODE EXPORTER — runs on ALL hosts
+# ============================================================
+
+- name: Create node_exporter system user
+  ansible.builtin.user:
+    name: node_exporter
+    system: true
+    shell: /sbin/nologin
+    create_home: false
+
+- name: Check if node_exporter is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/node_exporter
+  register: node_exporter_binary
+
+- name: Download node_exporter
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: /tmp/node_exporter.tar.gz
+    mode: "0644"
+  when: not node_exporter_binary.stat.exists
+
+- name: Extract node_exporter
+  ansible.builtin.unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /tmp/
+    remote_src: true
+  when: not node_exporter_binary.stat.exists
+
+- name: Install node_exporter binary
+  ansible.builtin.copy:
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+    dest: /usr/local/bin/node_exporter
+    owner: node_exporter
+    group: node_exporter
+    mode: "0755"
+    remote_src: true
+  when: not node_exporter_binary.stat.exists
+  notify: Restart node_exporter
+
+- name: Deploy node_exporter systemd service
+  ansible.builtin.template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart node_exporter
+
+- name: Ensure node_exporter is enabled and started
+  ansible.builtin.systemd:
+    name: node_exporter
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: Clean up node_exporter temp files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/node_exporter.tar.gz
+    - "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64"
+
+# ============================================================
+# PROMETHEUS — runs only on monitoring hosts
+# ============================================================
+
+- name: Create prometheus system user
+  ansible.builtin.user:
+    name: prometheus
+    system: true
+    shell: /sbin/nologin
+    create_home: false
+  when: "'monitoring' in group_names"
+
+- name: Create prometheus directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: "0755"
+  loop:
+    - /etc/prometheus
+    - /var/lib/prometheus
+  when: "'monitoring' in group_names"
+
+- name: Check if prometheus is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/prometheus
+  register: prometheus_binary
+  when: "'monitoring' in group_names"
+
+- name: Download prometheus
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+    dest: /tmp/prometheus.tar.gz
+    mode: "0644"
+  when:
+    - "'monitoring' in group_names"
+    - not prometheus_binary.stat.exists
+
+- name: Extract prometheus
+  ansible.builtin.unarchive:
+    src: /tmp/prometheus.tar.gz
+    dest: /tmp/
+    remote_src: true
+  when:
+    - "'monitoring' in group_names"
+    - not prometheus_binary.stat.exists
+
+- name: Install prometheus binaries
+  ansible.builtin.copy:
+    src: "/tmp/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    owner: prometheus
+    group: prometheus
+    mode: "0755"
+    remote_src: true
+  loop:
+    - prometheus
+    - promtool
+  when:
+    - "'monitoring' in group_names"
+    - not prometheus_binary.stat.exists
+  notify: Restart prometheus
+
+- name: Install prometheus console files
+  ansible.builtin.copy:
+    src: "/tmp/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}"
+    dest: "/etc/prometheus/{{ item }}"
+    owner: prometheus
+    group: prometheus
+    mode: "0755"
+    remote_src: true
+  loop:
+    - consoles
+    - console_libraries
+  when:
+    - "'monitoring' in group_names"
+    - not prometheus_binary.stat.exists
+
+- name: Deploy prometheus configuration
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: "0644"
+    validate: /usr/local/bin/promtool check config %s
+  when: "'monitoring' in group_names"
+  notify: Restart prometheus
+
+- name: Deploy prometheus systemd service
+  ansible.builtin.template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    owner: root
+    group: root
+    mode: "0644"
+  when: "'monitoring' in group_names"
+  notify: Restart prometheus
+
+- name: Ensure prometheus is enabled and started
+  ansible.builtin.systemd:
+    name: prometheus
+    state: started
+    enabled: true
+    daemon_reload: true
+  when: "'monitoring' in group_names"
+
+- name: Clean up prometheus temp files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/prometheus.tar.gz
+    - "/tmp/prometheus-{{ prometheus_version }}.linux-amd64"
+  when: "'monitoring' in group_names"

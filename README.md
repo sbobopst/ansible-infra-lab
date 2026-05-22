@@ -81,7 +81,7 @@ monitor01   | SUCCESS => { "ping": "pong" }
 | webserver | nginx installation and virtual host configuration | [✅ Done](docs/roles/webserver.md) |
 | database | PostgreSQL setup, users and databases | [✅ Done](docs/roles/database.md) |
 | hardening | SSH hardening, UFW firewall, fail2ban | [✅ Done](docs/roles/hardening.md) |
-| monitoring | Prometheus + Node Exporter | 🔜 |
+| monitoring | Prometheus + Node Exporter | [✅ Done](docs/roles/monitoring.md) |
 | docker | Docker Engine installation and configuration | 🔜 |
 
 ---

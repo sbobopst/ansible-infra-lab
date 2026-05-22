@@ -3,3 +3,4 @@
 # PostgreSQL accessible only from internal network
 hardening_allowed_ports:
   - { port: "5432", proto: "tcp" }
+  - { port: "9100", proto: "tcp" }
